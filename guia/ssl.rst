@@ -9,7 +9,7 @@ Para configurar el HTTPS server, el parametro ssl debe estar habilitado sobre un
 	    ...
 	    ssl_certificate     /path/certificado.crt;
 	    ssl_certificate_key /path/privatekey.key;
-            ssl_protocols       TLSv1.2;
+            ssl_protocols       TLSv1.2 TLSv1.3;
             ssl_ciphers         HIGH:!aNULL:!MD5;
 
 	    ...
