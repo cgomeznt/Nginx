@@ -7,7 +7,7 @@ Web server that can also be used as a reverse proxy, load balancer, mail proxy a
 * [Configurar SSL](guia/ssl.rst)
 * [Configurar SSL con Password](guia/sslpassword.rst)
 * [Cipher recomendado para cumplir con PCI](guia/cipherrecomendado.rst)
-* [Configurar Redireccionamiento](guia/redireccionamiento.rst)
+* [Nginx redirect http to https](guia/redireccionamiento.rst)
 * [Configurar Proxy Inverso](guia/proxyreverse.rst)
 * [Run Nginx non-root](guia/non-root.rst)
 

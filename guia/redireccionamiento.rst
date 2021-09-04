@@ -1,46 +1,39 @@
-Configurar Redireccionamiento
+Nginx redirect http to https
 ================================
 
-Redireccionamiento simpre utilizando el mod_alias de Apache, así como los tipos de redireccionamiento que existen.
+En el archivo de configuración agregue un bloque de **server** que solo escuche por el 80 y haga el redirect hacia el 443::
 
-Cuando se ha configurado un dominio en Apache, es necesario decidir bajo que configuración deseas que el contenido de tu página web se despliegue. La pregunta básica: con www o sin www o tambien http p https.
+	server {
+		listen 80 default_server;
+		server_name mywebsite.me www.mywebsite.me;
 
-¿Que es mod_alias?
+		return 301 https://$server_name$request_uri;
+	}
+
+Debe tener otro bloque de **server** en donde este en escucha por el 443 y pueda recibir el redirect.::
+
+	    server {
+		listen  443 ssl;
+		listen  [::]:443 ssl;
+		server_name  _;
+		root         /usr/share/nginx/html;
+
+		# Load configuration files for the default server block.
+		include /etc/nginx/default.d/*.conf;
+
+		error_page 404 /404.html;
+		location = /404.html {
+		}
+
+		error_page 500 502 503 504 /50x.html;
+		location = /50x.html {
+		}
+	    }
+
+
+
+Tipos de Redirect
 ++++++++++++++++++
-Es un módulo de Apache que permite manipular rutas de tu página web. Entre lo que se puede hacer es: crear rutas virtuales, redireccionar rutas, crear alias para rutas existentes incluso que no formen parte de tu sitio (en otro directorio dentro del servidor).
-
-Verificamos que este habilitado mod_alias en Apache.::
-
-	# grep mod_alias /etc/httpd/conf/httpd.conf 
-	LoadModule alias_module modules/mod_alias.so
-
-
-Ahora agregamos la configuración del redirect en el virtual host que lo requiera.::
-
-	<VirtualHost *:80>
-
-	ServerAdmin webmaster@example.com
-	DocumentRoot /var/www/html/prueba
-	ServerName public.com
-	ServerAlias prueba.com
-	ErrorLog logs/prueba_error.log
-	CustomLog logs/prueba_requests.log
-	Redirect 301 / https://github.com/cgomeznt
-	</VirtualHost>
-
-	<VirtualHost *:443>
-
-	ServerAdmin webmaster@example.com
-	DocumentRoot /var/www/html/public
-	ServerName public.com
-	ServerAlias public.com
-	ErrorLog logs/public_error.log
-	CustomLog logs/public_requests.log
-	SSLEngine on
-	SSLCertificateFile /etc/pki/tls/certs/ca.crt
-	SSLCertificateKeyFile /etc/pki/tls/private/private.key
-	</VirtualHost>
-
 
 Hay 4 tipos de redireccionamiento que podemos utilizar según nuestro criterio.
 
@@ -56,12 +49,42 @@ Indica que el recurso ha sido reemplazado por otro.
 402
 Indica que el recurso se ha eliminado de forma permanente. Cuando se utiliza este estado el argumento URL debe omitirse.
 
-Tambien puede hacer un Redirect permanent
-RedirectPermanent /welcome http://google.com
 
-Recargar la configuración de Apache.::
 
-# sudo service httpd reload
+Redirect Specific Sites
+++++++++++++++++++++++++++
 
-Tabien
+::
+
+	server {
+	    listen 80;
+
+	    server_name foo.com;
+	    return 301 https://foo.com$request_uri;
+	}
+
+Redirect segun Server Block
++++++++++++++++++++++++++++++
+
+::
+
+
+	server {
+		listen 80 default_server;
+		server_name _;
+
+		return 301 https://$server_name$request_uri;
+	}
+
+	server {
+	    listen 443 ssl default_server;
+	    server_name foo.com;
+	}
+
+	server {
+	    listen 443 ssl;
+	    server_name bar.com;
+	}
+
+	# and so on...
 
