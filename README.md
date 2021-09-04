@@ -3,7 +3,7 @@ Web server that can also be used as a reverse proxy, load balancer, mail proxy a
 
 * [Instalar Nginx en CentOS](guia/instalar.rst)
 * [Compilar Instalar Nginx en CentOS 7](guia/CompilarInstallCentos7.rst)
-* [Configurar un virtualhost](guia/virtualhost.rst)
+* [Configurar un Server Block](guia/virtualhost.rst)
 * [Configurar SSL](guia/ssl.rst)
 * [Configurar SSL con Password](guia/sslpassword.rst)
 * [Cipher recomendado para cumplir con PCI](guia/cipherrecomendado.rst)

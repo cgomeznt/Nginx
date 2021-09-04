@@ -1,30 +1,32 @@
-Instalar Apache en CentOS
+Instalar Nginx en CentOS
 ==========================
 
-Instalamos.::
-	
-	# yum install httpd
+Agregar repositorio::
 
-Iniciamos el servicio.::
+	yum install epel-release
 
-	# /etc/init.d/httpd start
+Instalar Nginx::
 
-Permisologia en Iptables.::
+	yum -y intall nginx
 
-	# vi /etc/sysconfig/iptables
-	-A INPUT -p tcp --dport 80  -j ACCEPT
-	-A INPUT -p tcp --dport 443  -j ACCEPT
+Iniciar Nginx::
 
-	# service iptables restart
+	systemctl status nginx
+	systemctl enable nginx
+	systemctl start nginx
 
-Probamos desde un navegador o con alguna herramienta desde consola.::
+Verificamos los puertos::
 
-	# curl -I -s -S 127.0.0.1 -k
-	HTTP/1.1 403 Forbidden
-	Date: Mon, 29 Aug 2016 02:42:23 GMT
-	Server: Apache/2.2.15 (CentOS)
-	Accept-Ranges: bytes
-	Content-Length: 4961
-	Connection: close
-	Content-Type: text/html; charset=UTF-8
+	netstat -natp | grep nginx
+	tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      1361/nginx: master  
+	tcp6       0      0 :::80                   :::*                    LISTEN      1361/nginx: master
 
+Consultamos el portal::
+
+	curl localhost:80
+
+**Default Server Root**
+El directorio raiz es /usr/share/nginx/html. 
+
+**Default File Conf**
+El archvivo de configuración es/etc/nginx/conf.d/default.conf.
